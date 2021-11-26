@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:zipzop/pages/singup_page.dart';
-
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:zipzop/helper/authenticate.dart';
+import 'package:zipzop/helper/util.dart';
+import 'package:zipzop/pages/chat_%20room_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -9,7 +10,16 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool userLoggedIn = false;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,7 +29,21 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Color(0xffEFEFEF),
         primarySwatch: Colors.teal,
       ),
-      home: SingUpPage(),
+      home: userLoggedIn ? ChatRoomPage() : Authenticate(),
     );
+  }
+
+  @override
+  void initState() {
+    getLoggedInState();
+    super.initState();
+  }
+
+  getLoggedInState() async {
+    await Util.getUserLoggedInSharedPreference().then((value) {
+      setState(() {
+        userLoggedIn = value!;
+      });
+    });
   }
 }

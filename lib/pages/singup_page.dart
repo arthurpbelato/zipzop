@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:zipzop/helper/util.dart';
+import 'package:zipzop/pages/chat_%20room_page.dart';
 import 'package:zipzop/services/auth.dart';
+import 'package:zipzop/services/database_methods.dart';
 import 'package:zipzop/widgets/widget.dart';
 
 class SingUpPage extends StatefulWidget {
-  const SingUpPage({Key? key}) : super(key: key);
+  final Function toggle;
+
+  SingUpPage(this.toggle);
 
   @override
   _SingUpPageState createState() => _SingUpPageState();
@@ -13,14 +18,22 @@ class _SingUpPageState extends State<SingUpPage> {
   bool isLoading = false;
 
   AuthMethods authMethods = new AuthMethods();
-
+  DatabaseMethods databaseMethods = new DatabaseMethods();
   final formKey = GlobalKey<FormState>();
   TextEditingController usernameController = new TextEditingController();
-  TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
+  TextEditingController emailController = new TextEditingController();
 
   void singMeUp() async {
     if (formKey.currentState!.validate()) {
+      Map<String, String> userMap = {
+        "username" : usernameController.text,
+        "email" : emailController.text
+      };
+
+      Util.saveUsernameSharedPreference(usernameController.text);
+      Util.saveEmailSharedPreference(emailController.text);
+
       setState(() {
         isLoading = true;
       });
@@ -28,7 +41,15 @@ class _SingUpPageState extends State<SingUpPage> {
       authMethods
           .singUpWithEmailAndPassword(
               emailController.text, passwordController.text)
-          .then((value) => print(value.toString()));
+          .then((value) {
+        print(value.toString());
+
+
+        databaseMethods.uploadUserInfo(userMap);
+        Util.saveUserLoggedInSharedPreference(true);
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => ChatRoomPage()));
+      });
     }
   }
 
@@ -146,10 +167,16 @@ class _SingUpPageState extends State<SingUpPage> {
                             "Já possui uma conta? ",
                             style: mediumTextStyle(),
                           ),
-                          Text(
-                            "Entre agora!",
-                            style: mediumTextStyle()
-                                .apply(decoration: TextDecoration.underline),
+                          GestureDetector(
+                            onTap: () => widget.toggle(),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 8),
+                              child: Text(
+                                "Entre agora!",
+                                style: mediumTextStyle().apply(
+                                    decoration: TextDecoration.underline),
+                              ),
+                            ),
                           ),
                         ],
                       ),

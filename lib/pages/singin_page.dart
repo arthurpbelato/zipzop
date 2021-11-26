@@ -1,14 +1,59 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:zipzop/helper/util.dart';
+import 'package:zipzop/pages/chat_%20room_page.dart';
+import 'package:zipzop/services/auth.dart';
+import 'package:zipzop/services/database_methods.dart';
 import 'package:zipzop/widgets/widget.dart';
 
 class SingInPage extends StatefulWidget {
-  const SingInPage({Key? key}) : super(key: key);
+  final Function toggle;
+
+  SingInPage(this.toggle);
 
   @override
   _SingInPageState createState() => _SingInPageState();
 }
 
 class _SingInPageState extends State<SingInPage> {
+  AuthMethods authMethods = new AuthMethods();
+  DatabaseMethods databaseMethods = new DatabaseMethods();
+  final formKey = GlobalKey<FormState>();
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
+
+  bool isLoading = false;
+
+  late QuerySnapshot snapshotUserInfo;
+
+  void singIn() async {
+    if (formKey.currentState!.validate()) {
+      Util.saveEmailSharedPreference(emailController.text);
+      Util.saveEmailSharedPreference(emailController.text);
+
+      setState(() {
+        isLoading = true;
+      });
+
+      databaseMethods.getUserByEmail(emailController.text).then((value) {
+        snapshotUserInfo = value;
+        Util.saveUsernameSharedPreference(snapshotUserInfo.docs[0]['username']);
+      });
+
+      authMethods
+          .signInWithEmailAndPassword(
+              emailController.text, passwordController.text)
+          .then((value) {
+        if (value != null) {
+
+          Util.saveUserLoggedInSharedPreference(true);
+          Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => ChatRoomPage()));
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,11 +67,33 @@ class _SingInPageState extends State<SingInPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(
-                  decoration: textFieldInputDecoration("email"),
-                ),
-                TextField(
-                  decoration: textFieldInputDecoration("senha"),
+                Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        decoration: textFieldInputDecoration("email"),
+                        validator: (val) {
+                          return RegExp(
+                                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                  .hasMatch(val!)
+                              ? null
+                              : "Preencha o email corretamente";
+                        },
+                        controller: emailController,
+                      ),
+                      TextFormField(
+                        decoration: textFieldInputDecoration("senha"),
+                        validator: (val) {
+                          return val!.length < 6
+                              ? "A senha deve ter pelo menos 6 caractéres"
+                              : null;
+                        },
+                        controller: passwordController,
+                        obscureText: true,
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 8,
@@ -44,22 +111,25 @@ class _SingInPageState extends State<SingInPage> {
                 SizedBox(
                   height: 8,
                 ),
-                Container(
-                  alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                      Color(0xff009688),
-                      Color(0xff028d81),
-                    ]),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Text(
-                    "Entrar",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
+                GestureDetector(
+                  onTap: () => singIn(),
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        Color(0xff009688),
+                        Color(0xff028d81),
+                      ]),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Text(
+                      "Entrar",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                      ),
                     ),
                   ),
                 ),
@@ -95,10 +165,16 @@ class _SingInPageState extends State<SingInPage> {
                       "Não possui uma conta? ",
                       style: mediumTextStyle(),
                     ),
-                    Text(
-                      "Registre-se agora!",
-                      style: mediumTextStyle()
-                          .apply(decoration: TextDecoration.underline),
+                    GestureDetector(
+                      onTap: () => widget.toggle(),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Text(
+                          "Registre-se agora!",
+                          style: mediumTextStyle()
+                              .apply(decoration: TextDecoration.underline),
+                        ),
+                      ),
                     ),
                   ],
                 ),
