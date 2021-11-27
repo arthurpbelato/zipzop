@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "232334961142",
+    "project_id": "zipzop-si2021",
+    "storage_bucket": "zipzop-si2021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:232334961142:android:201fe3b9d675bc70f93fd7",
+        "android_client_info": {
+          "package_name": "io.github.zipzop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "232334961142-l4ooqkhdrcagl40uhv14410nieh6jtdp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClHwZC4Z5d05DEACpeZ8H5yLjKXWyoSO8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "232334961142-l4ooqkhdrcagl40uhv14410nieh6jtdp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
