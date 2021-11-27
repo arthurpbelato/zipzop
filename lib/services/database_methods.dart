@@ -1,10 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:zipzop/exception/exception_handler.dart';
 
 class DatabaseMethods {
   Future getUserByUsername(String username) async {
     return await FirebaseFirestore.instance
         .collection('user')
-        .where('username', isEqualTo: username)
+        .where('username',
+            isGreaterThanOrEqualTo: username,
+            isLessThan: username.substring(0, username.length - 1) +
+                String.fromCharCode(
+                    username.codeUnitAt(username.length - 1) + 1))
         .get();
   }
 
@@ -20,7 +25,7 @@ class DatabaseMethods {
         .collection('user')
         .add(userMap)
         .catchError((onError) {
-      print(onError);
+      ExceptionHandler.handleException(onError);
     });
   }
 
@@ -30,8 +35,7 @@ class DatabaseMethods {
         .doc(chatRoomId)
         .set(chatRoom)
         .catchError((e) {
-      print(e);
+      ExceptionHandler.handleException(e);
     });
   }
-
 }

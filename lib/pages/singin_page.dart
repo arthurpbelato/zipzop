@@ -45,10 +45,9 @@ class _SingInPageState extends State<SingInPage> {
               emailController.text, passwordController.text)
           .then((value) {
         if (value != null) {
-
           Util.saveUserLoggedInSharedPreference(true);
           Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => ChatRoomPage()));
+              context, MaterialPageRoute(builder: (context) => ChatRoomPage()));
         }
       });
     }
@@ -59,131 +58,150 @@ class _SingInPageState extends State<SingInPage> {
     return Scaffold(
       appBar: appBarMain(context),
       body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height - 50,
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Form(
-                  key: formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        decoration: textFieldInputDecoration("email"),
-                        validator: (val) {
-                          return RegExp(
-                                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                  .hasMatch(val!)
-                              ? null
-                              : "Preencha o email corretamente";
-                        },
-                        controller: emailController,
-                      ),
-                      TextFormField(
-                        decoration: textFieldInputDecoration("senha"),
-                        validator: (val) {
-                          return val!.length < 6
-                              ? "A senha deve ter pelo menos 6 caractéres"
-                              : null;
-                        },
-                        controller: passwordController,
-                        obscureText: true,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Text(
-                      "Esqueci minha senha!",
-                      style: linkTextStyle(),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                GestureDetector(
-                  onTap: () => singIn(),
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                        Color(0xff009688),
-                        Color(0xff028d81),
-                      ]),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Text(
-                      "Entrar",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                      Color(0xff4385F4),
-                      Color(0xff407fea),
-                    ]),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Text(
-                    "Entrar com Google",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 24,
+            ),
+            Container(
+              alignment: Alignment.center,
+              height: 250,
+              child: Image.asset(
+                'assets/images/bg.png',
+                fit: BoxFit.contain,
+                scale: 0.5,
+              ),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      "Não possui uma conta? ",
-                      style: mediumTextStyle(),
+                    Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            decoration: textFieldInputDecoration("email"),
+                            validator: (val) {
+                              return RegExp(
+                                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                      .hasMatch(val!)
+                                  ? null
+                                  : "Preencha o email corretamente";
+                            },
+                            controller: emailController,
+                          ),
+                          TextFormField(
+                            decoration: textFieldInputDecoration("senha"),
+                            validator: (val) {
+                              return val!.length < 6
+                                  ? "A senha deve ter pelo menos 6 caractéres"
+                                  : null;
+                            },
+                            controller: passwordController,
+                            obscureText: true,
+                          ),
+                        ],
+                      ),
                     ),
-                    GestureDetector(
-                      onTap: () => widget.toggle(),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
                       child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 8),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         child: Text(
-                          "Registre-se agora!",
-                          style: mediumTextStyle()
-                              .apply(decoration: TextDecoration.underline),
+                          "Esqueci minha senha!",
+                          style: linkTextStyle(),
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    GestureDetector(
+                      onTap: () => singIn(),
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(colors: [
+                            Color(0xff009688),
+                            Color(0xff028d81),
+                          ]),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Text(
+                          "Entrar",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: [
+                          Color(0xff4385F4),
+                          Color(0xff407fea),
+                        ]),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Text(
+                        "Entrar com Google",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Não possui uma conta? ",
+                          style: mediumTextStyle(),
+                        ),
+                        GestureDetector(
+                          onTap: () => widget.toggle(),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 8),
+                            child: Text(
+                              "Registre-se agora!",
+                              style: mediumTextStyle()
+                                  .apply(decoration: TextDecoration.underline),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
                   ],
                 ),
-                SizedBox(
-                  height: 50,
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

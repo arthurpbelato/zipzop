@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:zipzop/exception/exception_handler.dart';
 import 'package:zipzop/helper/constants.dart';
 import 'package:zipzop/helper/util.dart';
 import 'package:zipzop/pages/conversation_page.dart';
@@ -34,7 +36,7 @@ class _SearchPageState extends State<SearchPage> {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => ConversationPage()));
     }else{
-      print('Tentando conversar sozinho? Quanta solidão');
+      ExceptionHandler.handleException('Tentando conversar sozinho? Quanta solidão :(');
     }
   }
 
