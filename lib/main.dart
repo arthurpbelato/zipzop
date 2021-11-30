@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:zipzop/helper/authenticate.dart';
 import 'package:zipzop/helper/util.dart';
 import 'package:zipzop/pages/chat_%20room_page.dart';
+import 'package:zipzop/pages/splash_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +30,7 @@ class _MyAppState extends State<MyApp> {
         scaffoldBackgroundColor: Color(0xffEFEFEF),
         primarySwatch: Colors.teal,
       ),
-      home: userLoggedIn ? ChatRoomPage() : Authenticate(),
+      home: SplashPage(userLoggedIn),
     );
   }
 

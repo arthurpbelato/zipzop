@@ -128,24 +128,24 @@ class _SingUpPageState extends State<SingUpPage> {
                           SizedBox(
                             height: 16,
                           ),
-                          GestureDetector(
-                            onTap: () => singMeUp(),
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width,
-                              padding: EdgeInsets.symmetric(vertical: 20),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(colors: [
-                                  Color(0xff009688),
-                                  Color(0xff028d81),
-                                ]),
-                                borderRadius: BorderRadius.circular(30),
-                              ),
+                          SizedBox(
+                            height: 60,
+                            width: MediaQuery.of(context).size.width,
+                            child: ElevatedButton(
                               child: Text(
-                                "Registrar",
+                                'Registrar',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 17,
+                                ),
+                              ),
+                              onPressed: () => singMeUp(),
+                              style: ButtonStyle(
+                                shape:
+                                MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ),
                                 ),
                               ),
                             ),
@@ -153,22 +153,26 @@ class _SingUpPageState extends State<SingUpPage> {
                           SizedBox(
                             height: 16,
                           ),
-                          Container(
-                            alignment: Alignment.center,
+                          SizedBox(
+                            height: 60,
                             width: MediaQuery.of(context).size.width,
-                            padding: EdgeInsets.symmetric(vertical: 20),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(colors: [
-                                Color(0xff4385F4),
-                                Color(0xff407fea),
-                              ]),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Text(
-                              "Registrar com Google",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 17,
+                            child: ElevatedButton(
+                              child: Text(
+                                'Registrar com o Google',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                ),
+                              ),
+                              onPressed: () {},
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(Color(0xff4385F4)),
+                                shape:
+                                MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
