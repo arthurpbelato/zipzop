@@ -211,23 +211,3 @@ class _SingInPageState extends State<SingInPage> {
     );
   }
 }
-
-// Container(
-// alignment: Alignment.center,
-// width: MediaQuery.of(context).size.width,
-// padding: EdgeInsets.symmetric(vertical: 20),
-// decoration: BoxDecoration(
-// gradient: LinearGradient(colors: [
-// Color(0xff009688),
-// Color(0xff028d81),
-// ]),
-// borderRadius: BorderRadius.circular(30),
-// ),
-// child: Text(
-// "Entrar",
-// style: TextStyle(
-// color: Colors.white,
-// fontSize: 17,
-// ),
-// ),
-// ),Color(0xff4385F4),
