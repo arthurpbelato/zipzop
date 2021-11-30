@@ -38,4 +38,13 @@ class DatabaseMethods {
       ExceptionHandler.handleException(e);
     });
   }
+
+  getConversationMessages(String chatRoomId, messageMap) {
+    FirebaseFirestore.instance.collection("ChatRoom")
+        .doc(chatRoomId)
+        .collection("chat1")
+        .add(messageMap).catchError((e) {
+          print(e.toString());
+        });
+  }
 }

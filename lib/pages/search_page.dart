@@ -8,6 +8,8 @@ import 'package:zipzop/pages/conversation_page.dart';
 import 'package:zipzop/services/database_methods.dart';
 import 'package:zipzop/widgets/widget.dart';
 
+import 'conversation_screen.dart';
+
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
 
@@ -34,7 +36,9 @@ class _SearchPageState extends State<SearchPage> {
 
       DatabaseMethods().addChatRoom(chatRoomMap, chatroomId);
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ConversationPage()));
+          context, MaterialPageRoute(builder: (context) => ConversationScreen(
+                chatRoomId: chatroomId,
+      )));
     }else{
       ExceptionHandler.handleException('Tentando conversar sozinho? Quanta solidão :(');
     }
