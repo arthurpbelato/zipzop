@@ -127,24 +127,24 @@ class _SingInPageState extends State<SingInPage> {
                     SizedBox(
                       height: 8,
                     ),
-                    GestureDetector(
-                      onTap: () => singIn(),
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.symmetric(vertical: 20),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                            Color(0xff009688),
-                            Color(0xff028d81),
-                          ]),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
+                    SizedBox(
+                      height: 60,
+                      width: MediaQuery.of(context).size.width,
+                      child: ElevatedButton(
                         child: Text(
-                          "Entrar",
+                          'Entrar',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 17,
+                          ),
+                        ),
+                        onPressed: () => singIn(),
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
                           ),
                         ),
                       ),
@@ -152,22 +152,26 @@ class _SingInPageState extends State<SingInPage> {
                     SizedBox(
                       height: 16,
                     ),
-                    Container(
-                      alignment: Alignment.center,
+                    SizedBox(
+                      height: 60,
                       width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [
-                          Color(0xff4385F4),
-                          Color(0xff407fea),
-                        ]),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Text(
-                        "Entrar com Google",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 17,
+                      child: ElevatedButton(
+                        child: Text(
+                          'Entrar com o Google',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                          ),
+                        ),
+                        onPressed: () {},
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Color(0xff4385F4)),
+                          shape:
+                          MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -207,3 +211,23 @@ class _SingInPageState extends State<SingInPage> {
     );
   }
 }
+
+// Container(
+// alignment: Alignment.center,
+// width: MediaQuery.of(context).size.width,
+// padding: EdgeInsets.symmetric(vertical: 20),
+// decoration: BoxDecoration(
+// gradient: LinearGradient(colors: [
+// Color(0xff009688),
+// Color(0xff028d81),
+// ]),
+// borderRadius: BorderRadius.circular(30),
+// ),
+// child: Text(
+// "Entrar",
+// style: TextStyle(
+// color: Colors.white,
+// fontSize: 17,
+// ),
+// ),
+// ),Color(0xff4385F4),
