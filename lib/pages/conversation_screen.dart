@@ -21,19 +21,19 @@ class _ConversationScreenState extends State<ConversationScreen> {
   DatabaseMethods databaseMethods = new DatabaseMethods();
   TextEditingController messageController = new TextEditingController();
 
-  late Stream<QuerySnapshot> chatMessagesStream;
+  Stream<QuerySnapshot>? chatMessagesStream;
 
   Widget ChatMessageList() {
     return StreamBuilder<QuerySnapshot>(
       stream: chatMessagesStream,
       builder: (context, snapshots) {
-        if(snapshots.hasData)
+       if(snapshots.hasData)
           return ListView.builder(
               itemCount: snapshots.data?.docs.length,
               itemBuilder: (context, index) {
-                return MessageTile(snapshots. data!.docs[index].data().toString());
+                return MessageTile(snapshots.data!.docs[index].get('message'));
               });
-        return Center(child: CircularProgressIndicator());
+         return Center(child: CircularProgressIndicator());
       },
     );
   }
@@ -48,6 +48,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
       };
     }
     databaseMethods.addConversationMessages(widget.chatRoomId, messageMap);
+    messageController.clear();
   }
 
   @override
@@ -60,9 +61,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
     setState(() {
       isLoading = true;
     });
-    await databaseMethods
-        .getConversationMessages(widget.chatRoomId)
-        .then((value) {
+    await databaseMethods.getConversationMessages(widget.chatRoomId).then((value) {
       setState(() {
         chatMessagesStream = value;
         isLoading = false;
@@ -128,7 +127,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
     );
   }
 }
-
+// isLoading? Center(child: CircularProgressIndicator()) :
 class MessageTile extends StatelessWidget {
   final String message;
 
