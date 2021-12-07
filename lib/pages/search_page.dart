@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:zipzop/exception/exception_handler.dart';
 import 'package:zipzop/helper/constants.dart';
-import 'package:zipzop/helper/util.dart';
-import 'package:zipzop/pages/conversation_page.dart';
 import 'package:zipzop/services/database_methods.dart';
 import 'package:zipzop/widgets/widget.dart';
+
+import 'conversation_screen.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -18,11 +17,10 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   TextEditingController searchController = new TextEditingController();
   DatabaseMethods databaseMethods = new DatabaseMethods();
-  String? _myName = '';
   QuerySnapshot? searchSnapshot;
 
   createChatRoomAndStartConversation(BuildContext context, String username) {
-    if(username != Constants.myName){
+    if (username != Constants.myName) {
       List<String> users = [username, Constants.myName];
 
       String chatroomId = getChatRoomId(username, Constants.myName);
@@ -34,9 +32,14 @@ class _SearchPageState extends State<SearchPage> {
 
       DatabaseMethods().addChatRoom(chatRoomMap, chatroomId);
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ConversationPage()));
-    }else{
-      ExceptionHandler.handleException('Tentando conversar sozinho? Quanta solidão :(');
+          context,
+          MaterialPageRoute(
+              builder: (context) => ConversationScreen(
+                    chatRoomId: chatroomId,
+                  )));
+    } else {
+      ExceptionHandler.handleException(
+          'Tentando conversar sozinho? Quanta solidão :(');
     }
   }
 
@@ -60,7 +63,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
           Spacer(),
           GestureDetector(
-            onTap:() => createChatRoomAndStartConversation(
+            onTap: () => createChatRoomAndStartConversation(
                 context, searchController.text),
             child: Container(
               decoration: BoxDecoration(
@@ -93,11 +96,8 @@ class _SearchPageState extends State<SearchPage> {
         : Container();
   }
 
-  getUserInfo() async{
-     _myName = await Util.getUsernameSharedPreference();
-     setState(() {
-
-     });
+  getUserInfo() async {
+    setState(() {});
   }
 
   @override
