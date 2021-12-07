@@ -50,10 +50,17 @@ class DatabaseMethods {
   }
 
   Future getConversationMessages(String chatRoomId) async {
-    return await FirebaseFirestore.instance.collection("chatRoom")
+    return FirebaseFirestore.instance.collection("chatRoom")
         .doc(chatRoomId)
         .collection("chats")
         .orderBy("time", descending: false)
+        .snapshots();
+  }
+
+  Future getChatRooms(String userName) async {
+    return FirebaseFirestore.instance
+        .collection("chatRoom")
+        .where("users", arrayContains: userName)
         .snapshots();
   }
 }

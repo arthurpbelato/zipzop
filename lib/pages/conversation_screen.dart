@@ -23,6 +23,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   Stream<QuerySnapshot>? chatMessagesStream;
 
+  // ignore: non_constant_identifier_names
   Widget ChatMessageList() {
     return StreamBuilder<QuerySnapshot>(
       stream: chatMessagesStream,
@@ -31,7 +32,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
           return ListView.builder(
               itemCount: snapshots.data?.docs.length,
               itemBuilder: (context, index) {
-                return MessageTile(snapshots.data!.docs[index].get('message'));
+                return MessageTile(snapshots.data!.docs[index].get('message'),
+                    snapshots.data!.docs[index].get('sendBy') == Constants.myName);
               });
          return Center(child: CircularProgressIndicator());
       },
@@ -130,13 +132,45 @@ class _ConversationScreenState extends State<ConversationScreen> {
 // isLoading? Center(child: CircularProgressIndicator()) :
 class MessageTile extends StatelessWidget {
   final String message;
+  final bool isSendByMe;
 
-  MessageTile(this.message);
+  MessageTile(this.message, this.isSendByMe);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text(message),
+      margin: EdgeInsets.symmetric(vertical: 1.5, horizontal: 8),
+      width: MediaQuery.of(context).size.width,
+      alignment: isSendByMe ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: isSendByMe ? [
+              const Color(0xffdca65a),
+              const Color(0xffe87bca)
+            ] : [
+              const Color(0xff6b97bd),
+              const Color(0xffadecb4)
+            ]
+          ),
+          borderRadius: isSendByMe ?
+              BorderRadius.only(
+                topLeft: Radius.circular(23),
+                topRight: Radius.circular(23),
+                bottomLeft: Radius.circular(23)
+              ) :
+              BorderRadius.only(
+                topLeft: Radius.circular(23),
+                topRight: Radius.circular(23),
+                bottomRight: Radius.circular(23)
+              )
+        ),
+        child: Text(message, style: TextStyle(
+          color: Colors.white,
+          fontSize: 18
+        )),
+      ),
     );
   }
 }
