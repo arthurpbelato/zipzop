@@ -20,6 +20,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   DatabaseMethods databaseMethods = new DatabaseMethods();
   TextEditingController messageController = new TextEditingController();
+  ScrollController _scrollController = ScrollController();
 
   Stream<QuerySnapshot>? chatMessagesStream;
 
@@ -30,6 +31,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
       builder: (context, snapshots) {
         if (snapshots.hasData)
           return ListView.builder(
+              controller: _scrollController,
               physics: ClampingScrollPhysics(),
               shrinkWrap: true,
               itemCount: snapshots.data?.docs.length,
@@ -44,6 +46,14 @@ class _ConversationScreenState extends State<ConversationScreen> {
     );
   }
 
+  Future scrollDown() async {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      curve: Curves.easeOut,
+      duration: const Duration(milliseconds: 300),
+    );
+  }
+
   sendMessage() {
     late Map<String, dynamic> messageMap;
     if (messageController.text.isNotEmpty) {
@@ -55,6 +65,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
     }
     databaseMethods.addConversationMessages(widget.chatRoomId, messageMap);
     messageController.clear();
+    scrollDown();
   }
 
   @override
@@ -68,13 +79,12 @@ class _ConversationScreenState extends State<ConversationScreen> {
       isLoading = true;
     });
     await databaseMethods
-        .getConversationMessages(widget.chatRoomId)
-        .then((value) {
-      setState(() {
-        chatMessagesStream = value;
-        isLoading = false;
-      });
-    });
+        .getConversationMessages(widget.chatRoomId).then((value) {
+          setState(() {
+            chatMessagesStream = value;
+            isLoading = false;
+          });
+        });
   }
 
   @override
@@ -85,8 +95,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
         child: Stack(
           children: [
             Container(
-                padding: EdgeInsets.only(bottom: 59),
-                child: ChatMessageList()),
+                padding: EdgeInsets.only(bottom: 59), child: ChatMessageList()),
             Container(
               alignment: Alignment.bottomCenter,
               child: Container(
