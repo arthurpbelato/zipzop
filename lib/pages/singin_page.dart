@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:zipzop/helper/util.dart';
+import 'package:zipzop/models/localUser.dart';
 import 'package:zipzop/pages/chat_%20room_page.dart';
 import 'package:zipzop/services/auth.dart';
 import 'package:zipzop/services/database_methods.dart';
@@ -45,12 +49,24 @@ class _SingInPageState extends State<SingInPage> {
               emailController.text, passwordController.text)
           .then((value) {
         if (value != null) {
-          Util.saveUserLoggedInSharedPreference(true);
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => ChatRoomPage()));
+          this.callChatRoomPage();
         }
       });
     }
+  }
+
+  void googleSingIn(){
+    authMethods.callGoogleSingIn().then((value) {
+      if(value != null){
+        this.callChatRoomPage();
+      }
+    });
+  }
+
+  void callChatRoomPage(){
+    Util.saveUserLoggedInSharedPreference(true);
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => ChatRoomPage()));
   }
 
   @override
@@ -155,15 +171,16 @@ class _SingInPageState extends State<SingInPage> {
                     SizedBox(
                       height: 60,
                       width: MediaQuery.of(context).size.width,
-                      child: ElevatedButton(
-                        child: Text(
+                      child: ElevatedButton.icon(
+                        label: Text(
                           'Entrar com o Google',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 17,
                           ),
                         ),
-                        onPressed: () {},
+                        icon: FaIcon(FontAwesomeIcons.google),
+                        onPressed: () => googleSingIn(),
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(Color(0xff4385F4)),
                           shape:
