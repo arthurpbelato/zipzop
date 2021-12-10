@@ -1,5 +1,10 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:zipzop/exception/exception_handler.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:zipzop/helper/constants.dart';
 
 class DatabaseMethods {
   Future getUserByUsername(String username) async {
@@ -40,7 +45,6 @@ class DatabaseMethods {
   }
 
   addConversationMessages(String chatRoomId, messageMap) {
-    print(messageMap);
     FirebaseFirestore.instance.collection("chatRoom")
         .doc(chatRoomId)
         .collection("chats")
@@ -63,4 +67,29 @@ class DatabaseMethods {
         .where("users", arrayContains: userName)
         .snapshots();
   }
+
+  Future uploadFile(File _image,String chatRoomId) async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref = storage.ref().child("image" + DateTime.now().toString());
+    ref.putFile(_image).then((res) {
+      res.ref.getDownloadURL().then((value) {
+        late Map<String, dynamic> messageMap;
+        messageMap = {
+          "message": "image",
+          "sendBy": Constants.myName,
+          "time": DateTime.now().millisecondsSinceEpoch,
+          "type": 1,
+          "image": value
+        };
+        addConversationMessages(chatRoomId, messageMap);
+      });
+    });
+  }
+
+  Future download(String url) async {
+    Reference httpsReference = FirebaseStorage.instance.refFromURL(url);
+    final int ONE_MEGABYTE = 1024 * 1024;
+    return httpsReference.getData(ONE_MEGABYTE);
+  }
+
 }

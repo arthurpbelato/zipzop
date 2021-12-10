@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -5,6 +7,8 @@ class Util{
   static String sharedPreferencesUserLoggedInKey = "ISLOGGED";
   static String sharedPreferencesUsernameKey = "USERNAME";
   static String sharedPreferencesEmailKey = "EMAIL";
+
+  final ImagePicker _picker = ImagePicker();
 
   static Future<bool> saveUserLoggedInSharedPreference(bool isUserLoggedIn) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -35,6 +39,12 @@ class Util{
   static Future<String?> getEmailSharedPreference() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(sharedPreferencesEmailKey);
+  }
+
+  static getImage(){
+    File _image;
+
+
   }
 }
 
