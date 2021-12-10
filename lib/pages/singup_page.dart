@@ -154,29 +154,6 @@ class _SingUpPageState extends State<SingUpPage> {
                             height: 16,
                           ),
                           SizedBox(
-                            height: 60,
-                            width: MediaQuery.of(context).size.width,
-                            child: ElevatedButton(
-                              child: Text(
-                                'Registrar com o Google',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 17,
-                                ),
-                              ),
-                              onPressed: () {},
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(Color(0xff4385F4)),
-                                shape:
-                                MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
                             height: 16,
                           ),
                           Row(

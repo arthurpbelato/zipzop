@@ -88,7 +88,7 @@ class DatabaseMethods {
 
   Future download(String url) async {
     Reference httpsReference = FirebaseStorage.instance.refFromURL(url);
-    final int ONE_MEGABYTE = 1024 * 1024;
+    final int ONE_MEGABYTE = (1024 * 1024)*5;
     return httpsReference.getData(ONE_MEGABYTE);
   }
 

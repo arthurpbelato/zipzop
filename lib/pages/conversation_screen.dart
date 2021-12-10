@@ -7,8 +7,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zipzop/helper/constants.dart';
 import 'package:zipzop/helper/image_picker.dart';
+import 'package:zipzop/pages/image_screen.dart';
 import 'package:zipzop/services/database_methods.dart';
 import 'package:zipzop/widgets/widget.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ConversationScreen extends StatefulWidget {
   final String chatRoomId;
@@ -54,7 +56,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                   return MessageImage(
                       snapshots.data!.docs[index].get('image'),
                       snapshots.data!.docs[index].get('sendBy') ==
-                          Constants.myName);
+                          Constants.myName,snapshots.data!.docs[index].get('time'));
                 }
               });
         return Center(child: CircularProgressIndicator());
@@ -105,16 +107,21 @@ class _ConversationScreenState extends State<ConversationScreen> {
         });
   }
 
-  teste() async {
-    var a = await imagePickerUtil.getImage();
-    if(a != null){
+  getImage(int from) async {
+    var image = null;
+    if(int == 1){
+      image = await imagePickerUtil.getImageCamera();
+    }else{
+      image = await imagePickerUtil.getImageGalerya();
+    }
+
+    if(image != null){
       setState(() {
-        _image = a;
+        _image = image;
         databaseMethods.uploadFile(_image,widget.chatRoomId);
         imageLodade = true;
       });
     }
-
   }
 
   @override
@@ -150,7 +157,26 @@ class _ConversationScreenState extends State<ConversationScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => teste(),
+                      onTap: () => getImage(0),
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.teal,
+                          borderRadius: BorderRadius.circular(40.0),
+                        ),
+                        padding: EdgeInsets.zero,
+                        child: Icon(
+                          Icons.image,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    GestureDetector(
+                      onTap: () => getImage(1),
                       child: Container(
                         height: 40,
                         width: 40,
@@ -237,17 +263,26 @@ class MessageImage extends StatelessWidget {
 
   String url;
 
+  int imageName;
+
   bool imageLodade = false;
   late File _image;
-  MessageImage(this.url, this.isSendByMe);
+  MessageImage(this.url, this.isSendByMe,this.imageName);
 
   DatabaseMethods databaseMethods = new DatabaseMethods();
 
-  download() async {
-    await databaseMethods.download(url).then((value) {
+  download(context) async {
+    await databaseMethods.download(url).then((value) async {
       print(value);
-      _image = File.fromRawPath(value);
+
+      final tempDir = await getTemporaryDirectory();
+      File file = await File('${tempDir.path}/${this.imageName}.png').create();
+      file.writeAsBytesSync(value);
+
+      _image = file;
       imageLodade = true;
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => ImageScreen(_image)));
     });
   }
 
@@ -275,7 +310,7 @@ class MessageImage extends StatelessWidget {
                 bottomRight: Radius.circular(23))),
         child: !imageLodade ?
         GestureDetector(
-          onTap: () => download(),
+          onTap: () => download(context),
           child: Container(
             height: 35,
             width: 35,
